@@ -1,47 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blackjack</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack</title>
+    <link href="style.css" rel="stylesheet">
 </head>
-<body>
-  <div class="game-container">
-    <div class="game-header">
-      <h1>Blackjack</h1>
-    </div>
-    <div class="game-body">
-      <div class="dealer-container">
-        <h2>Dealer's Hand</h2>
-        <div class="dealer-hand">
-          <!-- Dealer's cards will be displayed here -->
+<body class="bg-green-900 text-white font-roboto">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <h1 class="text-4xl font-playfair text-center mb-8 text-yellow-400">BLACKJACK</h1>
+        
+        <div class="game-board bg-green-800 rounded-lg shadow-2xl p-6 mb-6 border-4 border-yellow-600">
+            <div class="dealer-section mb-8">
+                <h2 class="text-xl mb-2">Dealer</h2>
+                <div class="score bg-black text-white inline-block px-3 py-1 rounded-md mb-2">
+                    Score: <span id="dealer-score">0</span>
+                </div>
+                <div id="dealer-hand" class="cards flex flex-wrap gap-2 min-h-16 p-3 bg-green-700 rounded-md"></div>
+            </div>
+
+            <div class="divider border-t-2 border-yellow-600 my-6"></div>
+
+            <div class="player-section">
+                <h2 class="text-xl mb-2">Player</h2>
+                <div class="score bg-black text-white inline-block px-3 py-1 rounded-md mb-2">
+                    Score: <span id="player-score">0</span>
+                </div>
+                <div id="player-hand" class="cards flex flex-wrap gap-2 min-h-16 p-3 bg-green-700 rounded-md"></div>
+            </div>
         </div>
-        <p>Dealer's Score: <span id="dealer-score">0</span></p>
-      </div>
-      <div class="player-container">
-        <h2>Player's Hand</h2>
-        <div class="player-hand">
-          <!-- Player's cards will be displayed here -->
+
+        <div class="controls flex justify-center gap-4 mb-8">
+            <button id="hit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                <i class="fas fa-plus mr-2"></i>Hit
+            </button>
+            <button id="stand" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                <i class="fas fa-hand-paper mr-2"></i>Stand
+            </button>
+            <button id="reset" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                <i class="fas fa-redo mr-2"></i>New Game
+            </button>
         </div>
-        <p>Player's Score: <span id="player-score">0</span></p>
-      </div>
-      <div class="score-container">
-        <h2>Scoreboard</h2>
-        <p>Player: <span id="player-general-score">0</span> <span class="vs">vs</span> Dealer: <span id="dealer-general-score">0</span></p>
-      </div>
+
+        <div class="stats bg-black bg-opacity-70 rounded-lg p-6 text-center border-2 border-yellow-600">
+            <h3 class="text-xl font-playfair text-yellow-400 mb-4">SCOREBOARD</h3>
+            <div class="flex justify-between items-center max-w-xs mx-auto">
+                <div class="player-score text-center">
+                    <div class="text-2xl font-bold">PLAYER</div>
+                    <div class="text-4xl font-bold text-green-300" id="player-wins">0</div>
+                </div>
+                <div class="vs text-xl font-playfair px-4">VS</div>
+                <div class="dealer-score text-center">
+                    <div class="text-2xl font-bold">DEALER</div>
+                    <div class="text-4xl font-bold text-red-300" id="dealer-wins">0</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="game-controls">
-      <button id="hit" class="game-button">Hit</button>
-      <button id="stand" class="game-button">Stand</button>
-      <button id="split" class="game-button">Split</button>
-      <button id="double-down" class="game-button">Double Down</button>
-      <button id="reveal" class="game-button">Reveal</button>
-    </div>
-    <div class="reset-container">
-      <button id="reset" class="reset-button">Reset</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
+
+    <div id="message-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); color: white; padding: 20px 40px; border-radius: 10px; font-size: 2rem; z-index: 1000;"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
