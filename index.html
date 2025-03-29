@@ -1,38 +1,47 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
-    <title> Deadly BlackJack </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="casino_table">
-        <div class="dealer">
-            <h2> Dealer's hand </h2>
-            <div class="cards" id="dealer_cards"></div>
-            <div class="score" id="dealer_score"></div>
-        </div>
-        <div class="player">
-            <h2> Player's hand </h2>
-            <div class="cards" id="player_cards"></div>
-            <div class="score" id="player_score"></div>
-        </div>
-        <div>
-            <h2>bank</h2>
-            <div class="bank" id="player_bank"></div>
-        </div>
-        <div class="playing_buttons">
-            <button id="stand"> stand </button>
-            <button id="hit"> hit </button>
-            <button id="double"> double </button>
-            <button id="insurance"> insurance </button>
-            <button id="restart"> restart </button>
-            <button id ="split" hidden > split </button>
-        </div>
+  <div class="game-container">
+    <div class="game-header">
+      <h1>Blackjack</h1>
     </div>
-
-    <script src="script.js"></script>
-    
+    <div class="game-body">
+      <div class="dealer-container">
+        <h2>Dealer's Hand</h2>
+        <div class="dealer-hand">
+          <!-- Dealer's cards will be displayed here -->
+        </div>
+        <p>Dealer's Score: <span id="dealer-score">0</span></p>
+      </div>
+      <div class="player-container">
+        <h2>Player's Hand</h2>
+        <div class="player-hand">
+          <!-- Player's cards will be displayed here -->
+        </div>
+        <p>Player's Score: <span id="player-score">0</span></p>
+      </div>
+      <div class="score-container">
+        <h2>Scoreboard</h2>
+        <p>Player: <span id="player-general-score">0</span> <span class="vs">vs</span> Dealer: <span id="dealer-general-score">0</span></p>
+      </div>
+    </div>
+    <div class="game-controls">
+      <button id="hit" class="game-button">Hit</button>
+      <button id="stand" class="game-button">Stand</button>
+      <button id="split" class="game-button">Split</button>
+      <button id="double-down" class="game-button">Double Down</button>
+      <button id="reveal" class="game-button">Reveal</button>
+    </div>
+    <div class="reset-container">
+      <button id="reset" class="reset-button">Reset</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
-
-
 </html>
