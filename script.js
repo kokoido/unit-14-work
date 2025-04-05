@@ -6,16 +6,15 @@ let total_dealer_wins = 0;
 let ace_count = 0;
 let score = 0;
 
-// ===== CARD DECK =====
 const new_pack = [
   "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥",
   "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
   "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
   "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠"
 ];
-let shuffled_cards = new_pack;
+let shuffled_cards = [];
 
-// ===== CARD FUNCTIONS =====
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i >= 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -23,24 +22,35 @@ function shuffleArray(array) {
   }
 }
 
-function deal(deck) {
-  return deck[Math.floor(Math.random() * deck.length)];
+function reshuffleDeck() {
+  shuffled_cards = [...new_pack];
+  shuffleArray(shuffled_cards);
 }
 
-// ===== GAME LOGIC =====
+function deal() {
+  if (shuffled_cards.length === 0) {
+    reshuffleDeck();
+  }
+  const randomIndex = Math.floor(Math.random() * shuffled_cards.length);
+  return shuffled_cards[randomIndex];
+}
+
+
 function starting_poker() {
-  shuffled_cards = new_pack;
-  shuffleArray(shuffled_cards);
+  reshuffleDeck();
   dealer_hand = [];
   player_hand = [];
   
   for (let i = 0; i < 2; i++) {
-    let temp_card = deal(shuffled_cards);
+    let temp_card = deal();
     dealer_hand.push(temp_card);
-    shuffled_cards.splice(shuffled_cards.indexOf(temp_card), 1);
-    temp_card = deal(shuffled_cards);
+    const dealerCardIndex = shuffled_cards.indexOf(temp_card);
+    if (dealerCardIndex >= 0) shuffled_cards.splice(dealerCardIndex, 1);
+    
+    temp_card = deal();
     player_hand.push(temp_card);
-    shuffled_cards.splice(shuffled_cards.indexOf(temp_card), 1);
+    const playerCardIndex = shuffled_cards.indexOf(temp_card);
+    if (playerCardIndex >= 0) shuffled_cards.splice(playerCardIndex, 1);
   }
   updateUI(true);
 }
@@ -49,10 +59,10 @@ function give_card_value(card) {
   const cardValue = card.charAt(0);
   if (["J", "Q", "K"].includes(cardValue)) score += 10;
   else if (cardValue == "A") { score += 11; ace_count += 1; }
+  else if (cardValue == 1 && card.charAt(1)) {score += 10;}
   else score += Number(cardValue);
   return score;
 }
-
 function ace_calculation() {
   while (ace_count != 0 && score > 21) {
     score -= 10;
@@ -72,11 +82,16 @@ function Scorecalculation(hand) {
   return score;
 }
 
-// ===== GAME ACTIONS =====
+
 function hit(hand) {
-  const new_card = deal(shuffled_cards);
-  hand.push(new_card);
-  shuffled_cards.splice(shuffled_cards.indexOf(new_card), 1);
+  const new_card = deal();
+  if (new_card) {
+    hand.push(new_card);
+    const cardIndex = shuffled_cards.indexOf(new_card);
+    if (cardIndex >= 0) {
+      shuffled_cards.splice(cardIndex, 1);
+    }
+  }
   
   if (hand === player_hand) {
     updateUI(true);
@@ -103,7 +118,7 @@ function stand() {
   setTimeout(revealCards, delay);
 }
 
-// ===== UI FUNCTIONS =====
+
 function updateUI(hideDealer = true) {
   document.getElementById("player-hand").innerHTML = player_hand.map(card => `<span>${card}</span>`).join(" ");
   document.getElementById("player-score").textContent = Scorecalculation(player_hand);
@@ -152,20 +167,16 @@ function check_win() {
     messageBox.style.display = 'none';
     dealer_hand = [];
     player_hand = [];
-    shuffled_cards = new_pack;
+    shuffled_cards = [...new_pack];
+    shuffleArray(shuffled_cards);
     starting_poker();
   }, 2000);
 }
 
-// ===== EVENT LISTENERS =====
+
 document.getElementById("hit").addEventListener("click", () => hit(player_hand));
 document.getElementById("stand").addEventListener("click", stand);
-document.getElementById("reset").addEventListener("click", () => {
-  dealer_hand = [];
-  player_hand = [];
-  shuffled_cards = new_pack;
-  starting_poker();
-});
+document.getElementById("reset").addEventListener("click", () => starting_poker());
 
 // Start game
 starting_poker();
