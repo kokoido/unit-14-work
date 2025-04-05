@@ -1,4 +1,4 @@
-// ===== GAME STATE =====
+
 let dealer_hand = [];
 let player_hand = [];
 let total_player_wins = 0;
@@ -119,16 +119,30 @@ function stand() {
 }
 
 
+function showcard(card) {
+  const value = card.length > 2 ? card.slice(0,2) : card[0];
+  const suit = card.slice(-1);
+  const isRed = suit === '♥' || suit === '♦';
+  
+  return `
+    <div class="card ${isRed ? 'card-red' : 'card-black'}">
+      <div class="card-corner card-corner-top">${value}${suit}</div>
+      <div class="card-suit">${suit}</div>
+      <div class="card-corner card-corner-bottom">${value}${suit}</div>
+    </div>
+  `;
+}
+
 function updateUI(hideDealer = true) {
-  document.getElementById("player-hand").innerHTML = player_hand.map(card => `<span>${card}</span>`).join(" ");
+  document.getElementById("player-hand").innerHTML = player_hand.map(showcard).join("");
   document.getElementById("player-score").textContent = Scorecalculation(player_hand);
 
   if (hideDealer) {
     document.getElementById("dealer-hand").innerHTML = 
-      `<span>${dealer_hand[0]}</span> <span class="card-back">🂠</span>`;
+      `${showcard(dealer_hand[0])}<div class="card card-back">🂠</div>`;
     document.getElementById("dealer-score").textContent = "?";
   } else {
-    document.getElementById("dealer-hand").innerHTML = dealer_hand.map(card => `<span>${card}</span>`).join(" ");
+    document.getElementById("dealer-hand").innerHTML = dealer_hand.map(showcard).join("");
     document.getElementById("dealer-score").textContent = Scorecalculation(dealer_hand);
   }
 }
