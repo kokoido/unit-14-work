@@ -117,27 +117,33 @@ async function placeBet(amount) {
 
 // Start a new round of blackjack
 async function startRound() {
-    playerHand = [dealCard(), dealCard()];
-    dealerHand = [dealCard(), dealCard()];
-    dealerHand[0].revealed = false;
-    updateUI(true);
-    disableBetting();
+    try {
+        playerHand = [dealCard(), dealCard()];
+        dealerHand = [dealCard(), dealCard()];
+        dealerHand[0].revealed = false;
+        updateUI(true);
+        disableBetting();
 
-    const playerScore = calculateHand(playerHand);
+        const playerScore = calculateHand(playerHand);
 
-    if (playerScore === 21) {
-        await showMessage('Blackjack! You win!');
-        bank += currentBet * 2.5;
-        wins++;
-        totalGains += currentBet * 1.5;
-        games++;
-        updateStats();
-        setTimeout(resetRound, 2000);
-        return;
+        if (playerScore === 21) {
+            await showMessage('Blackjack! You win!');
+            bank += currentBet * 2.5;
+            wins++;
+            totalGains += currentBet * 1.5;
+            games++;
+            updateStats();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await resetRound();
+            return;
+        }
+
+        document.querySelector('.game-buttons').classList.add('active');
+        enableGameButtons();
+    } catch (error) {
+        console.error('Error in startRound:', error);
+        await resetRound();
     }
-
-    document.querySelector('.game-buttons').classList.add('active');
-    enableGameButtons();
 }
 
 // Handle player's hit action
@@ -196,15 +202,16 @@ async function double() {
 
 // End the current round and determine winner
 async function endRound() {
-    disableGameButtons();
-    document.querySelector('.game-buttons').classList.remove('active');
-    
-    dealerHand.forEach(card => card.revealed = true);
-    updateUI(false);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const playerScore = calculateHand(playerHand);
-    const dealerScore = calculateHand(dealerHand);
+    try {
+        disableGameButtons();
+        document.querySelector('.game-buttons').classList.remove('active');
+        
+        dealerHand.forEach(card => card.revealed = true);
+        updateUI(false);
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const playerScore = calculateHand(playerHand);
+        const dealerScore = calculateHand(dealerHand);
     
     let result = 'lose';
     let message = '';
@@ -217,7 +224,7 @@ async function endRound() {
         message = 'Dealer busts! You win!';
     } else if (playerScore === dealerScore) {
         result = 'push';
-        message = 'Push! It's a tie!';
+        message = 'Push! Its a tie!';
     } else {
         result = playerScore > dealerScore ? 'win' : 'lose';
         message = result === 'win' ? 'You win!' : 'Dealer wins!';
@@ -260,19 +267,29 @@ async function endRound() {
 
     await new Promise(resolve => setTimeout(resolve, 1500));
     await resetRound();
+    } catch (error) {
+        console.error('Error in endRound:', error);
+        await resetRound();
+    }
 }
 
 // Reset the game table for a new round
 async function resetRound() {
-    const cards = document.querySelectorAll('.card');
-    const fadeOutPromises = Array.from(cards).map(card => {
-        return new Promise(resolve => {
-            card.style.transition = 'transform 0.5s, opacity 0.5s';
-            card.style.transform = 'scale(0)';
-            card.style.opacity = '0';
-            card.addEventListener('transitionend', resolve, { once: true });
+    try {
+        const cards = document.querySelectorAll('.card');
+        const fadeOutPromises = Array.from(cards).map(card => {
+            return new Promise(resolve => {
+                try {
+                    card.style.transition = 'transform 0.5s, opacity 0.5s';
+                    card.style.transform = 'scale(0)';
+                    card.style.opacity = '0';
+                    card.addEventListener('transitionend', resolve, { once: true });
+                } catch (error) {
+                    console.error('Error in card animation:', error);
+                    resolve();
+                }
+            });
         });
-    });
     
     await Promise.all(fadeOutPromises);
     await new Promise(resolve => setTimeout(resolve, 200));
@@ -299,6 +316,19 @@ async function resetRound() {
     updateUI();
     
     await new Promise(resolve => setTimeout(resolve, 300));
+    } catch (error) {
+        console.error('Error in resetRound:', error);
+        // Reset game state even if animations fail
+        currentBet = 0;
+        playerHand = [];
+        dealerHand = [];
+        document.getElementById('current-bet').textContent = '0';
+        document.getElementById('dealer-score').textContent = '0';
+        document.getElementById('player-score').textContent = '0';
+        document.querySelector('.betting-buttons').style.display = 'block';
+        enableBetting();
+        updateUI();
+    }
 }
 
 // Display game messages with animations
