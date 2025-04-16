@@ -4,52 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blackjack</title>
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>BLACKJACK</h1>
+    <div class="game-container">
+        <h1>blackjack</h1>
         
-        <div class="game-board">
-            <div class="dealer-section">
-                <h2>Dealer</h2>
-                <div class="score">Score: <span id="dealer-score">0</span></div>
-                <div id="dealer-hand" class="cards"></div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="player-section">
-                <h2>Player</h2>
-                <div class="score">Score: <span id="player-score">0</span></div>
-                <div id="player-hand" class="cards"></div>
-            </div>
+        <div class="dealer-area">
+            <p>Dealer score: <span id="dealer-score">?</span></p>
+            <div id="dealer-cards" class="cards"></div>
         </div>
 
-        <div class="game-controls">
-            <button id="hit">Hit</button>
-            <button id="stand">Stand</button>
-            <button id="reset">New Game</button>
+        <div class="player-area">
+            <p>Player score: <span id="player-score">0</span></p>
+            <div id="player-cards" class="cards"></div>
         </div>
 
-        <div class="scoreboard">
-            <h3>SCOREBOARD</h3>
-            <div class="scores">
-                <div>
-                    <div>PLAYER</div>
-                    <div id="player-wins">0</div>
-                </div>
-                <div>VS</div>
-                <div>
-                    <div>DEALER</div>
-                    <div id="dealer-wins">0</div>
-                </div>
+        <div class="current-bet">Current Bet: £<span id="current-bet">0</span></div>
+        <div class="betting-buttons">
+            <button class="bet-btn" data-amount="10">£10</button>
+            <button class="bet-btn" data-amount="50">£50</button>
+            <button class="bet-btn" data-amount="100">£100</button>
+            <button class="bet-btn" data-amount="500">£500</button>
+        </div>
+
+        <div class="game-buttons">
+            <button id="hit-btn">hit</button>
+            <button id="stand-btn">stand</button>
+            <button id="double-btn">double</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <p>bank: £<span id="bank">500</span></p>
+                <p>win rate: <span id="win-rate">0</span>%</p>
+            </div>
+            <div class="stat-item">
+                <p>total losses: £<span id="losses">0</span></p>
+                <p>total gains: £<span id="gains">0</span></p>
             </div>
         </div>
     </div>
-
-    <div id="message-box"></div>
-
     <script src="script.js"></script>
 </body>
 </html>
