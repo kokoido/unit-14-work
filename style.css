@@ -30,13 +30,13 @@ h1 {
 }
 
 .dealer-area, .player-area {
-    background-color: #004d00;
+    background-color: #007A33;
     padding: 20px;
-    margin: 10px 0;
     border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    border: 2px solid #006400;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 .cards {
     min-height: 100px;
@@ -86,12 +86,11 @@ h1 {
     background: #e74c3c;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border: 2px solid #c0392b;
+    border: 2px solid gold;
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
     background-color: #2a2a2a;
     color: transparent;
-    border: 2px solid gold;
     transition: transform 0.6s;
     transform-style: preserve-3d;
     backface-visibility: hidden;
